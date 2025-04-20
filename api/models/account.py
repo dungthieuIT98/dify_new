@@ -11,66 +11,7 @@ from models.base import Base
 from .engine import db
 from .types import StringUUID
 
-
-class TenantAccountRole(enum.StrEnum):
-    OWNER = "owner"
-    ADMIN = "admin"
-    EDITOR = "editor"
-    NORMAL = "normal"
-    DATASET_OPERATOR = "dataset_operator"
-
-    @staticmethod
-    def is_valid_role(role: str) -> bool:
-        if not role:
-            return False
-        return role in {
-            TenantAccountRole.OWNER,
-            TenantAccountRole.ADMIN,
-            TenantAccountRole.EDITOR,
-            TenantAccountRole.NORMAL,
-            TenantAccountRole.DATASET_OPERATOR,
-        }
-
-    @staticmethod
-    def is_privileged_role(role: Optional["TenantAccountRole"]) -> bool:
-        if not role:
-            return False
-        return role in {TenantAccountRole.OWNER, TenantAccountRole.ADMIN}
-
-    @staticmethod
-    def is_admin_role(role: Optional["TenantAccountRole"]) -> bool:
-        if not role:
-            return False
-        return role == TenantAccountRole.ADMIN
-
-    @staticmethod
-    def is_non_owner_role(role: Optional["TenantAccountRole"]) -> bool:
-        if not role:
-            return False
-        return role in {
-            TenantAccountRole.ADMIN,
-            TenantAccountRole.EDITOR,
-            TenantAccountRole.NORMAL,
-            TenantAccountRole.DATASET_OPERATOR,
-        }
-
-    @staticmethod
-    def is_editing_role(role: Optional["TenantAccountRole"]) -> bool:
-        if not role:
-            return False
-        return role in {TenantAccountRole.OWNER, TenantAccountRole.ADMIN, TenantAccountRole.EDITOR}
-
-    @staticmethod
-    def is_dataset_edit_role(role: Optional["TenantAccountRole"]) -> bool:
-        if not role:
-            return False
-        return role in {
-            TenantAccountRole.OWNER,
-            TenantAccountRole.ADMIN,
-            TenantAccountRole.EDITOR,
-            TenantAccountRole.DATASET_OPERATOR,
-        }
-
+from configs import dify_config
 
 class AccountStatus(enum.StrEnum):
     PENDING = "pending"
@@ -101,10 +42,12 @@ class Account(UserMixin, Base):
     created_at = db.Column(db.DateTime, nullable=False, server_default=func.current_timestamp())
     updated_at = db.Column(db.DateTime, nullable=False, server_default=func.current_timestamp())
 
-    @reconstructor
-    def init_on_load(self):
-        self.role: Optional[TenantAccountRole] = None
-        self._current_tenant: Optional[Tenant] = None
+    # Custom fields
+    month_before_banned = db.Column(db.Integer, nullable=False, server_default=db.text(str(dify_config.user_account_month_before_banned)))
+    max_of_apps = db.Column(db.Integer, nullable=False, server_default=db.text(str(dify_config.user_account_max_of_apps)))
+    max_vector_space = db.Column(db.Integer, nullable=False, server_default=db.text(str(dify_config.user_account_max_vector_space)))
+    max_annotation_quota_limit = db.Column(db.Integer, nullable=False, server_default=db.text(str(dify_config.user_account_max_annotation_quota_limit)))
+    max_documents_upload_quota = db.Column(db.Integer, nullable=False, server_default=db.text(str(dify_config.user_account_max_documents_upload_quota)))
 
     @property
     def is_password_set(self):
