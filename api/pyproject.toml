@@ -159,17 +159,11 @@ dev = [
 # [ Storage ] dependency group
 # Required for storage clients
 ############################################################
-storage = [
-    "azure-storage-blob==12.13.0",
-    "bce-python-sdk~=0.9.23",
-    "cos-python-sdk-v5==1.9.30",
-    "esdk-obs-python==3.24.6.1",
-    "google-cloud-storage==2.16.0",
-    "opendal~=0.45.16",
-    "oss2==2.18.5",
-    "supabase~=2.8.1",
-    "tos~=2.7.1",
-]
+ruff = "^0.11.6"
+[tool.poetry.group.indirect.dependencies]
+kaleido = "0.2.1"
+rank-bm25 = "~0.2.2"
+safetensors = "~0.4.3"
 
 ############################################################
 # [ Tools ] dependency group

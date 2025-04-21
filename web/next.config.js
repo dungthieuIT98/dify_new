@@ -25,12 +25,6 @@ const nextConfig = {
   assetPrefix,
   webpack: (config, { dev, isServer }) => {
     config.plugins.push(codeInspectorPlugin({ bundler: 'webpack' }))
-    // if (dev) {
-    //   config.watchOptions = {
-    //     poll: 1000, // kiểm tra thay đổi mỗi 1 giây
-    //     aggregateTimeout: 300,
-    //   }
-    // }
     return config
   },
 
