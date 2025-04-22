@@ -68,7 +68,6 @@ from .provider import (
     TenantPreferredModelProvider,
 )
 from .source import DataSourceApiKeyAuthBinding, DataSourceOauthBinding
-from .system_custom_info import SystemCustomInfo
 from .task import CeleryTask, CeleryTaskSet
 from .tools import (
     ApiToolProvider,
@@ -90,6 +89,11 @@ from .workflow import (
     WorkflowRun,
     WorkflowType,
 )
+
+# Custom additions
+from .system_custom_info import SystemCustomInfo
+from .payments_history_custom import PaymentsHistoryCustom
+from .alies_payments_custom import AliesPaymentsCustom
 
 __all__ = [
     "APIBasedExtension",
@@ -179,4 +183,6 @@ __all__ = [
     "db",
     # Custom addition
     "SystemCustomInfo",
+    "PaymentsHistoryCustom",
+    "AliesPaymentsCustom",
 ]
