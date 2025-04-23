@@ -24,13 +24,13 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Setup UV and Python
-        uses: ./.github/actions/setup-uv
+      - name: Setup Poetry and Python
+        uses: ./.github/actions/setup-poetry
         with:
-          uv-lockfile: api/uv.lock
+          poetry-lockfile: api/poetry.lock
 
       - name: Install dependencies
-        run: uv sync --project api
+        run: poetry install -C api
 
       - name: Prepare middleware env
         run: |
@@ -54,4 +54,6 @@ jobs:
       - name: Run DB Migration
         env:
           DEBUG: true
-        run: uv run --directory api flask upgrade-db
+        run: |
+          cd api
+          poetry run python -m flask upgrade-db
