@@ -45,7 +45,7 @@ RUN \
     && apt-get install -y --no-install-recommends \
         # basic environment
         curl nodejs libgmp-dev libmpfr-dev libmpc-dev \
-    # For Security
+        # For Security
         expat libldap-2.5-0 perl libsqlite3-0 zlib1g \
         # install a package to improve the accuracy of guessing mime type and file extension
         media-types \
@@ -70,10 +70,10 @@ RUN python -c "import tiktoken; tiktoken.encoding_for_model('gpt2')"
 COPY . /app/api/
 
 # Copy entrypoint
-COPY docker/entrypoint.sh ./entrypoint.sh
-RUN chmod +x ./entrypoint.sh
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 ARG COMMIT_SHA
 ENV COMMIT_SHA=${COMMIT_SHA}
 
-ENTRYPOINT ["/bin/bash", "./entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
