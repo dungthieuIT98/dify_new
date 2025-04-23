@@ -42,6 +42,7 @@ export type UserProfileOriginResponse = {
   headers: any
 }
 
+// Custom plan response
 export type CustomPlanResponse = {
   id: number
   name: string
@@ -63,6 +64,33 @@ export type CustomPlansOriginResponse = {
   bodyUsed: boolean
   headers: any
 }
+
+// Custom payment setting response
+export type CustomPaymentSettingResponse = {
+  account_name: string
+  account_id: string
+  bank_id: string
+}
+
+export type CustomPaymentSettingOriginResponse = {
+  json: () => Promise<CustomPaymentSettingResponse>
+  bodyUsed: boolean
+  headers: any
+}
+
+export type PayRequestResponse = {
+  status: 'success' | 'error' // Match the actual API response status field
+  message: string
+  url?: string // URL is optional, only present on success
+}
+
+export type PayRequestOriginResponse = {
+  json: () => Promise<PayRequestResponse>
+  bodyUsed: boolean
+  headers: any
+}
+
+// ------
 
 export type LangGeniusVersionResponse = {
   current_version: string
