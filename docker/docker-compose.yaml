@@ -530,9 +530,9 @@ services:
       redis:
         condition: service_started
     volumes:
-      - ../api:/app/api # Development mode
-      - ../api/docker/entrypoint.sh:/app/api/entrypoint.sh # Development mode
-      - api_venv:/app/api/.venv
+      # - ../api:/app/api # Development mode
+      # - ../api/docker/entrypoint.sh:/app/api/entrypoint.sh # Development mode
+      # - api_venv:/app/api/.venv
       # Mount the storage directory to the container, for storing user files.
       - ./volumes/app/storage:/app/api/storage
       # - ../api/migrations/versions:/app/api/migrations/versions # Development mode
@@ -560,9 +560,9 @@ services:
       redis:
         condition: service_started
     volumes:
-      - ../api:/app/api # Development mode
-      - ../api/docker/entrypoint.sh:/app/api/entrypoint.sh # Development mode
-      - api_venv:/app/api/.venv
+      # - ../api:/app/api # Development mode
+      # - ../api/docker/entrypoint.sh:/app/api/entrypoint.sh # Development mode
+      # - api_venv:/app/api/.venv
       # Mount the storage directory to the container, for storing user files.
       - ./volumes/app/storage:/app/api/storage
       # - ../api/migrations/versions:/app/api/migrations/versions # Development mode
@@ -582,8 +582,8 @@ services:
     networks:
       - ssrf_proxy_network
       - default
-    volumes:
-      - ../dashboard:/app/dashboard # Development mode
+    # volumes:
+    #   - ../dashboard:/app/dashboard # Development mode
     build:
       context: ../dashboard
       dockerfile: Dockerfile
@@ -613,8 +613,8 @@ services:
     build:
       context: ../web
       dockerfile: Dockerfile
-    volumes:
-      - ../web/app:/app/web/app # Development mode
+    # volumes:
+    #   - ../web/app:/app/web/app # Development mode
 
   # The postgres database.
   db:
@@ -637,7 +637,9 @@ services:
       test: [ 'CMD', 'pg_isready', '-h', 'db', '-U', '${PGUSER:-postgres}', '-d', '${POSTGRES_DB:-dify}' ]
       interval: 1s
       timeout: 3s
-      retries: 60
+      retries: 30
+    ports:
+      - "${DB_PORT:-5432}:5432"
 
   # The redis cache.
   redis:
@@ -730,8 +732,9 @@ services:
     volumes:
       - ./volumes/plugin_daemon:/app/storage
     depends_on:
-      db:
-        condition: service_healthy
+      - db
+      - api
+      - worker
 
   # ssrf_proxy server
   # for more information, please refer to
