@@ -17,11 +17,9 @@ import CreateAppModal from '@/app/components/explore/create-app-modal'
 import type { CreateAppModalProps } from '@/app/components/explore/create-app-modal'
 import Loading from '@/app/components/base/loading'
 import Input from '@/app/components/base/input'
-import {
-  DSLImportMode,
-} from '@/models/app'
-import { useImportDSL } from '@/hooks/use-import-dsl'
-import DSLConfirmModal from '@/app/components/app/create-from-dsl-modal/dsl-confirm-modal'
+import { DSLImportMode } from '@/models/app'
+import { usePluginDependencies } from '@/app/components/workflow/plugin-dependency/hooks'
+import useBreakpoints, { MediaType } from '@/hooks/use-breakpoints'
 
 type AppsProps = {
   onSuccess?: () => void
@@ -38,6 +36,9 @@ const Apps = ({
   const { t } = useTranslation()
   const { hasEditPermission } = useContext(ExploreContext)
   const allCategoriesEn = t('explore.apps.allCategories', { lng: 'en' })
+
+  const media = useBreakpoints()
+  const isMobile = media === MediaType.mobile
 
   const [keywords, setKeywords] = useState('')
   const [searchKeywords, setSearchKeywords] = useState('')
@@ -168,11 +169,12 @@ const Apps = ({
 
       <div className='shrink-0 px-12 pt-6'>
         <div className={`mb-1 ${s.textGradient} text-xl font-semibold`}>{t('explore.apps.title')}</div>
-        <div className='text-sm text-text-tertiary'>{t('explore.apps.description')}</div>
+        {/* <div className='text-sm text-text-tertiary'>{t('explore.apps.description')}</div> */}
       </div>
 
       <div className={cn(
         'mt-6 flex items-center justify-between px-12',
+        isMobile ? 'flex flex-col-reverse' : ''
       )}>
         <>
           <Category
@@ -185,7 +187,7 @@ const Apps = ({
         <Input
           showLeftIcon
           showClearIcon
-          wrapperClassName='w-[200px]'
+          wrapperClassName='w-full sm:w-[200px]'
           value={keywords}
           onChange={e => handleKeywordsChange(e.target.value)}
           onClear={() => handleKeywordsChange('')}
